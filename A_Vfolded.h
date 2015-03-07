@@ -7,29 +7,19 @@
 /****************************************************************/
 #ifndef A_Vfolded
 #define A_Vfolded
+#include "constants.h"
 #include "Gauss_q.h"
+
 using namespace std;
 
 template <class T>
 inline T norma(T x1,T r,T cosi){return sqrt(x1*x1+r*r-2*x1*r*cosi);}
-/****************************************************************/
-template <class T>
-//T coulomb(T r,T Ro1,int Z1,int Z2)
-T coulomb(T r,T Ro1,T Ro2,int Z1,int Z2)
-{const double e2=1.4427713;     //[MeV*fm]
- if(r>(Ro1+Ro2)) return e2*Z1*Z2/r;
- else    return e2*Z1*Z2*(1.5-0.5*r*r/(Ro1*Ro1))/Ro1;//check!!!
-}
+/****************************************************************
+ *  WOOD-SAXON PARAMETERS                                       *
+ ****************************************************************/
 
-template <class T>
-T V_l(T r,T mr,int l){return 0.5*l*(l+1)*hbarc*hbarc/(mr*r*r);}
-
-/****************************************************************/
-/*WOOD-SAXON PARAMETERS                                         */
-/****************************************************************/
-//template<class T>
 double diffuse(int Z){return (Z==6)? 0.56:0.58;}
-
+/****************************************************************/
 template <class T>
 void two_vec(T Ro,int Z,T &integr)
 {vector<T> oneover(200);
