@@ -6,12 +6,15 @@
  *BUILDING NOV 15,07.
  */
 /********************************************************/
+/*
 #include<iostream>
 #include<fstream>
 #include<cstring>
 #include "A_Vfolded.h"
 #include "Derivate.h"
 #include "minimal.h"
+*/
+#include "AFusion.h"
 using namespace std;
 /********************************************************/
 ofstream Otro;
@@ -19,8 +22,8 @@ char afuera[15];
 int B1,B2,Z1,Z2;
 int L;
 double Rnot1,Rnot2,r,rInfinity,massR,En,S_E,crossSec;
-double const e2=1.4427713;       //[MeV*fm]
-double const hbarc2=hbarc*hbarc;
+//double const e2=1.4427713;       //[MeV*fm]
+//double const hbarc2=hbarc*hbarc;
 /*
  *REDUCED MASS
  */
