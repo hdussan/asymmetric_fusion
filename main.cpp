@@ -1,15 +1,13 @@
 /*
- *                        AFusion.cpp
- * author: Helber Dussan
- * project: Asymmetric fusion
- *
- *  FUSION ^Z1+^Z2 REACTIONS
- *  NEW CODE FOR ASYMMETRIC FUSION.
- *  A_Vfolded.h GETS VFOLDED FROM W-S.
- *  
+ *                        main.cpp
+ *FUSION ^Z1+^Z2 REACTIONS
+ *NEW CODE FOR ASYMMETRIC FUSION.
+ *A_Vfolded.h GETS VFOLDED FROM W-S.
+ *BUILDING NOV 15,07.
  */
+/********************************************************/
 
-#include "AFusion.h"
+#include "a_fusion.h"
 using namespace std;
 /********************************************************/
 ofstream Otro;
@@ -119,12 +117,13 @@ T smallGuess(T r_o,int l)
 }
 
 
-/*********************************************************
- *    PROBABILITY OF PENETRATING THE BARRIER POTENTIAL   *
- *GIVEN TURNING POINTS r1 AND r2 GETS Tl                 *
- *Tl   TRANSMISSION COEF.                                *
- *Sl   PENETRATION PROBABILITY                           *
- *********************************************************/
+/*********************************************************/
+/*    PROBABILITY OF PENETRATING THE BARRIER POTENTIAL   */
+/*GIVEN TURNING POINTS r1 AND r2 GETS Tl                 */
+/*Tl   TRANSMISSION COEF.                                */
+/*Sl   PENETRATION PROBABILITY                           */
+/*Tl_HW  TRANSMISSION COEF. WHEN E>Vmax (HILL-WHEELER)   */
+/*********************************************************/
 template<class T>
 T Tl(T r2,T r1,int l)
 {
@@ -139,10 +138,6 @@ T Tl(T r2,T r1,int l)
  return 1/(1+exp(Sl)); 
 }
 
-/*
- *  GIVEN TURNING POINTS r1 AND r2 GETS Tl                 
- *  Tl_HW  TRANSMISSION COEF. WHEN E>Vmax (HILL-WHEELER)   
- */
 template<class T>
 T Tl_HW(T b_)
 {T Rmax,Vmax,omegal;

@@ -1,8 +1,8 @@
-/**
-   main header file for asymmetric fusion
+/*
+ *  main header file for asymmetric fusion
  */
-#ifndef AFusion_h
-#define AFusion_h
+#ifndef a_fusion_h
+#define a_fusion_h
 #include <iostream>
 #include <fstream>
 #include <cstring>
