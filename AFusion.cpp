@@ -1,19 +1,14 @@
 /*
- *                        AFusion.C
- *FUSION ^Z1+^Z2 REACTIONS
- *NEW CODE FOR ASYMMETRIC FUSION.
- *A_Vfolded.h GETS VFOLDED FROM W-S.
- *BUILDING NOV 15,07.
+ *                        AFusion.cpp
+ * author: Helber Dussan
+ * project: Asymmetric fusion
+ *
+ *  FUSION ^Z1+^Z2 REACTIONS
+ *  NEW CODE FOR ASYMMETRIC FUSION.
+ *  A_Vfolded.h GETS VFOLDED FROM W-S.
+ *  
  */
-/********************************************************/
-/*
-#include<iostream>
-#include<fstream>
-#include<cstring>
-#include "A_Vfolded.h"
-#include "Derivate.h"
-#include "minimal.h"
-*/
+
 #include "AFusion.h"
 using namespace std;
 /********************************************************/
@@ -22,8 +17,7 @@ char afuera[15];
 int B1,B2,Z1,Z2;
 int L;
 double Rnot1,Rnot2,r,rInfinity,massR,En,S_E,crossSec;
-//double const e2=1.4427713;       //[MeV*fm]
-//double const hbarc2=hbarc*hbarc;
+
 /*
  *REDUCED MASS
  */
@@ -125,13 +119,12 @@ T smallGuess(T r_o,int l)
 }
 
 
-/*********************************************************/
-/*    PROBABILITY OF PENETRATING THE BARRIER POTENTIAL   */
-/*GIVEN TURNING POINTS r1 AND r2 GETS Tl                 */
-/*Tl   TRANSMISSION COEF.                                */
-/*Sl   PENETRATION PROBABILITY                           */
-/*Tl_HW  TRANSMISSION COEF. WHEN E>Vmax (HILL-WHEELER)   */
-/*********************************************************/
+/*********************************************************
+ *    PROBABILITY OF PENETRATING THE BARRIER POTENTIAL   *
+ *GIVEN TURNING POINTS r1 AND r2 GETS Tl                 *
+ *Tl   TRANSMISSION COEF.                                *
+ *Sl   PENETRATION PROBABILITY                           *
+ *********************************************************/
 template<class T>
 T Tl(T r2,T r1,int l)
 {
@@ -146,6 +139,10 @@ T Tl(T r2,T r1,int l)
  return 1/(1+exp(Sl)); 
 }
 
+/*
+ *  GIVEN TURNING POINTS r1 AND r2 GETS Tl                 
+ *  Tl_HW  TRANSMISSION COEF. WHEN E>Vmax (HILL-WHEELER)   
+ */
 template<class T>
 T Tl_HW(T b_)
 {T Rmax,Vmax,omegal;
