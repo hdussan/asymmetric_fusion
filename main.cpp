@@ -12,9 +12,9 @@ using namespace std;
 /********************************************************/
 ofstream Otro;
 char afuera[15];
-int B1,B2,Z1,Z2;
+int B1, B2, Z1, Z2;
 int L;
-double Rnot1,Rnot2,r,rInfinity,massR,En,S_E,crossSec;
+double Rnot1, Rnot2, r, rInfinity, massR, En, S_E, crossSec;
 
 /*
  *REDUCED MASS
@@ -24,7 +24,7 @@ double mReduce(int B1,int B2){return B1*B2*Uma/(B1+B2);}
 /*
  *WOOD-SAXON RADIUS
  */
-double R_o(int B){return 1.31*pow(B,1.0/3.0)-0.84;}
+double R_o(int B){return 1.31 * pow(B,1.0/3.0) - 0.84;}
 
 /********************************************************/
 /*   FUNCTIONS  SELF-CONSISTENT VELOCITY CALCULATION    */

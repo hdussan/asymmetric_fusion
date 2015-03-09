@@ -18,38 +18,43 @@ using namespace std;
 /*******************   Numerical CONSTANTS    *******************/
 /****************************************************************/
 template<class T>
-inline void input(char *S,T &x) {cout<<S; cin>>x; }
-double const pi=3.1415926535;
-double const e_=2.7182818284;
-double const ln_2=0.6931471805;
-/*****************  physical constants NOW           ************/
-double const M=939;         //baryon mass
-double const me=0.5;        //electron mass
-double const hbarc=197.33;  //conversion constant
-double const alpha=0.091725;//(e^2/(4pi*hbarc)) Structure fine constant
-double const Uma=931.5;//494013;//Atomic unit mass[MeV]
-double const lp=1.793;      //Proton's anomalous magnetic moment 
-double const ln=-1.913;     //Neutron's anomalous magnetic moment 
-double const gM=4;          //degeneracy symmetric nuclear matter
-double const gN=2;          //degeneracy neutron matter
-/****************************************************************/
-/****************                                    ************/
-/****************   useful operations                ************/
-/****************                                    ************/
-/****************************************************************/
+inline void input(char *S,T &x) 
+{ 
+  cout<<S; cin>>x; 
+}
+
+/****************************************************************
+ ***************                                     ************
+ ***************   useful operations                 ************
+ ***************                                     ************
+ ****************************************************************/
 
 template<class T>
-inline T sign(T x) {return x<0? -1:1;}
+inline T sign(T x) 
+{ 
+  return x<0? -1:1;
+}
 
 template<class T>
 inline const T SIGN(const T &a,const T &b)
-{return b>=0? (a>=0? a:-a):(a>=0? -a:a);}
-
-template <class T> 
-inline T pyth(T x,T y){return sqrt(x*x+y*y);}
+{
+  return b >= 0? ( a >= 0? a:-a):(a >= 0? -a:a);
+}
 
 inline double maxi(double a,double b){return a<b? b:a;}
 inline double mini(double a,double b){return a<b? a:b;}
+
+template <class T> 
+inline T pyth(T x,T y)
+{
+  return sqrt(x * x + y * y);
+}
+
+template <class T>
+inline T norma(T x1,T r,T cosi)
+{
+  return sqrt(x1 * x1 + r * r - 2 * x1 * r * cosi);
+}
 
 /***************************************************************/
 /*                   INTERPOLATIONS                            */  

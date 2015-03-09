@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include "A_Vfolded.h"
+#include "A_Vfolded.h"//"folded_potential.h"
 #include "potentials.h"
 #include "Derivate.h"
 #include "minimal.h"
