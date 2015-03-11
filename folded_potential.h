@@ -12,13 +12,25 @@
 
 using namespace std;
 
-double diffuseness(int Z);
-double central_density(double Radius, int baryonNumber, int protonNumber);
-double ws_density(double Radius, int baryonNumber, int protonNumber, double a, double density0, double radialDistance);
+double R_o(int baryonNumber);
 
+double diffuseness(int protonNumber);
+
+double central_density(double Radius, double a, int baryonNumber, 
+                       int protonNumber);
+
+double ws_density(double Radius, int baryonNumber, int protonNumber, 
+                  double a, double density0, double radialDistance);
+
+double folded_potential(double r, double wsRadius1, double wsRadius2,
+                        int protonNumber1,int protonNumber2,
+                        int baryonNumber1,int baryonNumber2);
+
+
+#endif
 /****************************************************************
  *  WOOD-SAXON PARAMETERS                                       *
- ****************************************************************/
+ ****************************************************************
 
 template <class T>
 void two_vec(T Ro,int Z,T &integr)
@@ -44,7 +56,7 @@ T rhows(int B,int Z,T r,T Ro,T integr)
  return rho0/(1+exp(local));
 }
 
-/****************************************************************/
+
 
 template <class T>
 T V_f(T r,T Ro1,T Ro2,int Z1,int Z2,int B1,int B2)
@@ -72,7 +84,10 @@ GausLeg(0.0,30.0,XX1,W);
       }
  return 2*pi*Vo*Vr;
 }
-/*****************************************************************/
+
+
+*****************************************************************/
+/*
 template<class T,T G(T,int)>
 T turnPoint(T a,T b,int L,T &X,int N)
 {
@@ -89,6 +104,5 @@ T turnPoint(T a,T b,int L,T &X,int N)
        else c=newpoint;
     }
 }
-/*****************************************************************/
+*****************************************************************/
 
-#endif
