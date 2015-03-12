@@ -18,6 +18,24 @@ double const hbarc2 = hbarc * hbarc;
 
 /********* TO BE REMOVED ******************/
 /********* TO BE REMOVED ****************/
+template<class T,T G(T,int)>
+T turnPoint(T a,T b,int L,T &X,int N)
+{
+ T point,newpoint;
+ T c=0.5*(a+b);
+ X=c;
+ for(int j=0;j<=N;j++)
+    {
+      point=c;
+      (G(c,L)*G(b,L)>0)? b=point:a=point;
+      newpoint=0.5*(a+b);
+      if(fabs((newpoint-point)/newpoint)<1.0e-12){X=newpoint; break;}
+      // if(fabs(G(newpoint,L))<1.0e-10){X=newpoint; break;}
+       else c=newpoint;
+    }
+}
+
+
 /********* TO BE REMOVED ****************/
 /**/
 template <class T>

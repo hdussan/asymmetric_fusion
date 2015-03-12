@@ -1,6 +1,6 @@
-/****************************************************************/
-/*******************   Some standard methods  *******************/
-/****************************************************************/
+/****************************************************************
+ *******************   Some standard methods  *******************
+ ****************************************************************/
 #ifndef methods
 #define methods
 #include<iostream>
@@ -14,9 +14,7 @@
 #include<errno.h>
 
 using namespace std;
-/****************************************************************/
-/*******************   Numerical CONSTANTS    *******************/
-/****************************************************************/
+
 template<class T>
 inline void input(char *S,T &x) 
 { 
@@ -56,12 +54,12 @@ inline T norma(T x1,T r,T cosi)
   return sqrt(x1 * x1 + r * r - 2 * x1 * r * cosi);
 }
 
-/***************************************************************/
-/*                   INTERPOLATIONS                            */  
-/*Linear interpolation between two given points.               */
-/*LAGRANGE                                                     */
-/*NEWTON                                                       */
-/***************************************************************/
+/***************************************************************
+ *		     INTERPOLATIONS			       *  
+ *Linear interpolation between two given points.	       *
+ *LAGRANGE						       *
+ *NEWTON						       *
+ ***************************************************************/
 template <class T>
 T inter(T x,T x1,T x2,T y1,T y2)
   {return (x*(y2-y1)+(y1*x2-y2*x1))/(x2-x1);}
@@ -80,7 +78,6 @@ T y=0;
  return y;
 }
 
-/*NOT WORKING WELL*/
 template <class T>
 T lagrange(int order,const vector<T>& vx,const vector<T>& vy,T x)
 {int n=vx.size()-1;
@@ -189,11 +186,11 @@ T gaussian(int n)
   }
 }
 
-/*****************************************************************/
-/*****************               *********************************/
-/***************** Finding roots *********************************/
-/*****************               *********************************/
-/*****************************************************************/
+/****************************************************************
+ *****************		*********************************
+ ***************** Finding roots ********************************
+ *****************		*********************************
+ *****************************************************************/
 
 template<class T,T F(T,T,T)>
   T Zero(T a,T b,T Y,T Z,T &X,int N)
@@ -208,14 +205,40 @@ template<class T,T F(T,T,T)>
 	else  c=newpoint;
 	}
     }
-/****************************************************************/
-/**********                 VECTORS                    **********/
-/****************************************************************/
+
+/* Specialised vesion of the bisection method */
+template<class T,T F(T,int)>
+T Zero(T a,T b,int l,T &X,int N)
+{
+  T point, newpoint;
+  T c = (a + b) / 2;
+  X = c;
+  for(int j=0;j<=N;j++)
+  {
+    point=c;
+    (F(c, l) * F(b, l) > 0)? b = point: a = point;
+    newpoint = (a + b) / 2;
+    if(fabs(F(newpoint, l)) < 1e-10)
+    {
+      X=newpoint;
+      break;
+    }
+    else  c=newpoint;
+   }
+ }
+
+/****************************************************************
+ **********		    VECTORS		       **********
+ ****************************************************************/
 template<class T>
 T dot(const vector<T>& u,const vector<T>& v)
-{T dotprod=0;
- int n=u.size();
- for(int i=0;i<n;i++)dotprod+=u[i]*v[i];
+{
+ T dotprod = 0;
+ int n = u.size();
+ for(int i=0; i<n; i++)
+ {
+   dotprod += u[i] * v[i];
+ }
  return dotprod;
 }
 

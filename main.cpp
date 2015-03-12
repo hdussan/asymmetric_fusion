@@ -10,27 +10,29 @@
 #include "a_fusion.h"
 using namespace std;
 /********************************************************/
-ofstream Otro;
-char afuera[15];
+
 int B1, B2, Z1, Z2;
 int L;
 double Rnot1, Rnot2, r, rInfinity, massR, En, S_E, crossSec;
 
-/*********************************************************/
-/*menos Effective V (-Veff)                              */
-/*********************************************************/
+/*********************************************************
+ *menos Effective V (-Veff)                              *
+ * To be replaced by function method in semi_classical   *
+ *********************************************************/
 template<class T>
 T _Veff(T r_)
 {
  T Vc = coulomb(r_,Rnot1,Rnot2,Z1,Z2);
  T Vl = V_l(r_,massR,L);
  T Vfold = V_f(r_,Rnot1,Rnot2,Z1,Z2,B1,B2);
- T A1=2*(En-Vc)/massR; T A2=2*Vfold/massR;
- T v_2=speedy2(En,A1,A2);
- return -Vc-Vfold*exp(-4*v_2)-Vl;
+ T A1 = 2 * (En - Vc)/massR; 
+ T A2 = 2 * Vfold / massR;
+ T v_2 = speedy2(En, A1, A2);
+ return -Vc - Vfold * exp(-4 * v_2) - Vl;
 }
 /*********************************************************
  *Effective V - En                                       *
+ * To be replaced by function method in semi_classical   *
  *********************************************************/
 template<class T>
 T E_eff(T r,int l)
@@ -83,8 +85,9 @@ T smallGuess(T r_o,int l)
 template<class T>
 T smallGuess(T r_o,int l)
 {
-  T c=0,cplus,cminos;
-  turnPoint<T,E_eff>(r_o,9.,l,c,100);
+  int const maxIterations = 50;
+  T c=0, cplus, cminos;
+  Zero<T, E_eff>(r_o, 9.,l, c, maxIterations);
   cplus=c+2*r_o;
   cminos=c-2*r_o;
   return (E_eff(cplus, l)<0)? cplus:fabs(cminos); 
@@ -140,8 +143,10 @@ for(int l_=local;l_<T_l.size();l_++)
     {
       a_=smallGuess(0.04,l_);
       b_=midGuess(r,l_);
-      turnPoint<T,E_eff>(a_,b_,l_,r2,100);
-      turnPoint<T,E_eff>(b_,r,l_,r1,1000);
+      /* VERY SLOW */
+      Zero<T,E_eff>(a_,b_,l_,r2,100);
+      Zero<T,E_eff>(b_,r,l_,r1,100);
+
       T deltar=fabs(r1-r2);
       L=l_;
       T_l[l_]=(deltar<1e-5? Tl_HW(b_):Tl(r2,r1,l_));      
@@ -156,11 +161,19 @@ for(int l_=local;l_<T_l.size();l_++)
 /*********************************************************/
 int main()
 {
+ ofstream Otro;
+ char afuera[15];
+ /** Commented for faster testing
  cout<<"  ASYMMETRIC FUSION CALCULATION\n";
  cout<<" A1=? and Z1=?\n";
  cin>>B1;    cin>>Z1; 
  cout<<" A2=? and Z2=?\n";
  cin>>B2;    cin>>Z2;  
+ **/
+ B1 = 18;
+ Z1 = 8;
+ B2 =18;
+ Z2 = 8;
  Rnot1 = R_o(B1);
  Rnot2 = R_o(B2);
  massR = mReduce(B1, B2);
@@ -168,8 +181,12 @@ int main()
  cout<<"W-S parameter Ro1="<<Rnot1<<" fm\n";
  cout<<"W-S parameter Ro2="<<Rnot2<<" fm\n";
  cout<<"reduced mass mu="<<massR<<" MeV\n";
-
- cout<<"Enter guessed r infinity ="; cin>>r; cout<<"fm";
+ /**
+ cout<<"Enter guessed r infinity ="; 
+ cin>>r; 
+ cout<<"fm";
+**/
+ r = 40;
  rInfinity = 30;
  cout<<"\n";
  
