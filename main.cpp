@@ -9,48 +9,12 @@
 
 #include "a_fusion.h"
 using namespace std;
-/********************************************************/
-
-int B1, B2, Z1, Z2;
-int L;
-double Rnot1, Rnot2, r, rInfinity, massR, En, S_E, crossSec;
 
 /*********************************************************
- *menos Effective V (-Veff)                              *
- * To be replaced by function method in semi_classical   *
- *********************************************************/
-template<class T>
-T _Veff(T r_)
-{
- T Vc = coulomb(r_,Rnot1,Rnot2,Z1,Z2);
- T Vl = V_l(r_,massR,L);
- T Vfold = V_f(r_,Rnot1,Rnot2,Z1,Z2,B1,B2);
- T A1 = 2 * (En - Vc)/massR; 
- T A2 = 2 * Vfold / massR;
- T v_2 = speedy2(En, A1, A2);
- return -Vc - Vfold * exp(-4 * v_2) - Vl;
-}
-/*********************************************************
- *Effective V - En                                       *
- * To be replaced by function method in semi_classical   *
- *********************************************************/
-template<class T>
-T E_eff(T r,int l)
-{
- T Vc=coulomb(r,Rnot1,Rnot2,Z1,Z2);
- T Vl=V_l(r,massR,l);
- T Vfold=V_f(r,Rnot1,Rnot2,Z1,Z2,B1,B2);//correct??
- T A1=2*(En-Vc)/massR; 
- T A2=2*Vfold/massR;
- T v_2=speedy2(En, A1, A2);
- return Vc+Vfold*exp(-4*v_2)+Vl-En;
-}
-
-
-/*********************************************************/
-/*  midGuess & smallGuess                                */
-/*CHECK FOR GOOD GUESSES FOR FINDING THE TURNING POINTS  */
-/*INPUTS r_inf $ r_o                                     */
+ *  midGuess & smallGuess				 *
+ *CHECK FOR GOOD GUESSES FOR FINDING THE TURNING POINTS	 *
+ *INPUTS r_inf $ r_o					 *
+ * to be replaced by middleGuess()  in semiclassical     *
 /*********************************************************/
 template<class T>
 T midGuess(T r_inf,int l)
@@ -65,6 +29,7 @@ T midGuess(T r_inf,int l)
       } 
  return a;
 }
+
 /*
 template<class T>
 T smallGuess(T r_o,int l)
@@ -186,7 +151,7 @@ int main()
  cin>>r; 
  cout<<"fm";
 **/
- r = 40;
+ r = 50;
  rInfinity = 30;
  cout<<"\n";
  

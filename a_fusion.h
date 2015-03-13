@@ -15,6 +15,49 @@
 #include "Gauss_q.h"
 using namespace std;
 double const hbarc2 = hbarc * hbarc;
+/*  
+   Global variables to be removed also
+   Everything should be local
+ */
+int B1, B2, Z1, Z2;
+int L;
+double Rnot1, Rnot2, r, rInfinity, massR, En, S_E, crossSec;
+
+/*********************************************************
+ *menos Effective V (-Veff)                              *
+ * To be replaced by function method in semi_classical   *
+ *********************************************************/
+template<class T>
+T _Veff(T r_)
+{
+ T Vc = coulomb(r_,Rnot1,Rnot2,Z1,Z2);
+ T Vl = V_l(r_,massR,L);
+ T Vfold = V_f(r_,Rnot1,Rnot2,Z1,Z2,B1,B2);
+ T A1 = 2 * (En - Vc)/massR; 
+ T A2 = 2 * Vfold / massR;
+ T v_2 = speedy2(En, A1, A2);
+ return -Vc - Vfold * exp(-4 * v_2) - Vl;
+}
+
+/*********************************************************
+ *Effective V - En                                       *
+ * To be replaced by function method                     * 
+ *  PotentialMenusEnergy()                               *
+ *   in semi_classical                                   *
+ *********************************************************/
+template<class T>
+T E_eff(T r,int l)
+{
+ T Vc=coulomb(r,Rnot1,Rnot2,Z1,Z2);
+ T Vl=V_l(r,massR,l);
+ T Vfold=V_f(r,Rnot1,Rnot2,Z1,Z2,B1,B2);//correct??
+ T A1=2*(En-Vc)/massR; 
+ T A2=2*Vfold/massR;
+ T v_2=speedy2(En, A1, A2);
+ return Vc+Vfold*exp(-4*v_2)+Vl-En;
+}
+
+
 
 /********* TO BE REMOVED ******************/
 /********* TO BE REMOVED ****************/
@@ -90,5 +133,9 @@ GausLeg(0.0,30.0,XX1,W);
 }
 
 /********* TO BE REMOVED ***/
+
+
+
+
 
 #endif

@@ -32,6 +32,11 @@ double PotentialMenusEnergy(double r, double Energy,
 			     double reducedMass, int orbitalAngularMomentum);
 
 
+double middleGuess(double r_infinity,  double Energy,
+		   double wsRadius1, double wsRadius2,
+		   int protonNumber1, int protonNumber2,
+		   int baryonNumber1, int baryonNumber2,
+		   double reducedMass, int orbitalAngularMomentum);
 /********************************************************
  *   FUNCTIONS	SELF-CONSISTENT VELOCITY CALCULATION	*
  * To be declared  Don't have to be templates    !!!!!  *

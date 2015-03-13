@@ -86,3 +86,51 @@ double selfconsistentV2(double Energy, double coeff1, double coeff2)
 				   reducedMass, orbitalAngularMomentum); 
   return Veff - Energy;
 }
+
+/*********************************************************
+ *  midGuess & smallGuess				 *
+ *CHECK FOR GOOD GUESSES FOR FINDING THE TURNING POINTS	 *
+ *INPUTS r_inf  or r_o in fm				 *
+ *********************************************************/
+
+double middleGuess(double r_infinity,  double Energy,
+		   double wsRadius1, double wsRadius2,
+		   int protonNumber1, int protonNumber2,
+		   int baryonNumber1, int baryonNumber2,
+		   double reducedMass, int orbitalAngularMomentum)
+{
+  double rAtInfinity = r_infinity;
+  double const step = 0.2;
+  int l = orbitalAngularMomentum;
+  int z1 = protonNumber1;
+  int z2 = protonNumber2;
+  int B1 = baryonNumber1;
+  int B2 = baryonNumber2;
+  double mu = reducedMass;
+  double a = 0;
+
+  double deltaEnergy = PotentialMenusEnergy(rAtInfinity, Energy, wsRadius1, wsRadius2,
+			                    z1, z2, B1, B2, mu, l);
+  
+  if(deltaEnergy > 0)
+  {
+    a = rAtInfinity;
+  }
+  else
+  {
+    here:
+    rAtInfinity -= step;
+    deltaEnergy = PotentialMenusEnergy(rAtInfinity, Energy, wsRadius1, wsRadius2,
+			                    z1, z2, B1, B2, mu, l);
+    if(deltaEnergy > 0)
+    {
+      a = rAtInfinity;
+    }
+    else
+    {
+      goto here;
+    }
+  } 
+ return a;
+}
+
