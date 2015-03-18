@@ -14,7 +14,7 @@
 #include "constants.h"
 #include "Gauss_q.h"
 using namespace std;
-double const hbarc2 = hbarc * hbarc;
+
 /*  
    Global variables to be removed also
    Everything should be local
@@ -26,6 +26,7 @@ double Rnot1, Rnot2, r, rInfinity, massR, En, S_E, crossSec;
 /*********************************************************
  *menos Effective V (-Veff)                              *
  * To be replaced by function method in semi_classical   *
+ *  menosEffectiveV( )                                   *
  *********************************************************/
 template<class T>
 T _Veff(T r_)
