@@ -64,14 +64,12 @@ double selfconsistentV2(double Energy, double coeff1, double coeff2)
    double coeff1 = 2 * (Energy - Vc)/ mu; 
    double coeff2 = 2 * Vfolded / mu;
    double v2 = selfconsistentV2(Energy, coeff1, coeff2);
-   
-   return -Vc - Vfolded * exp(-4 * v2) - Vl;
+    return -Vc - Vfolded * exp(-4 * v2) - Vl;
  }
 
 /*
  *   Effective Potential - Energy
  *  To find the return points   => 
- *  TODO: Need a new specialised bisection function (because of arguments)
  */
 
  double potentialMenusEnergy(double r, double Energy,
@@ -84,12 +82,11 @@ double selfconsistentV2(double Energy, double coeff1, double coeff2)
 			         protonNumber1, protonNumber2, 
                                  baryonNumber1, baryonNumber2,
 				 reducedMass, orbitalAngularMomentum); 
-  return Veff - Energy;
+ return Veff - Energy;
 }
 
 /*********************************************************
- *  midGuess & smallGuess				 *
- *CHECK FOR GOOD GUESSES FOR FINDING THE TURNING POINTS	 *
+ *CHECK FOR GOOD GUESSES FOR FINDING THE TURNING POINTS  *
  *INPUTS r_inf  or r_o in fm				 *
  *********************************************************/
 
@@ -100,7 +97,7 @@ double middleGuess(double r_infinity,  double Energy,
 		   double reducedMass, int orbitalAngularMomentum)
 {
   double rAtInfinity = r_infinity;
-  double const step = 0.2;
+  double const step = 0.5;
   int l = orbitalAngularMomentum;
   int z1 = protonNumber1;
   int z2 = protonNumber2;
@@ -119,11 +116,13 @@ double middleGuess(double r_infinity,  double Energy,
   }
   else
   {
+    
     here:
     rAtInfinity -= step;
     deltaEnergy = potentialMenusEnergy(rAtInfinity, Energy, 
                                        wsRadius1, wsRadius2,
 			               z1, z2, B1, B2, mu, l);
+   
     if(deltaEnergy > 0)
     {
       a = rAtInfinity;
@@ -135,8 +134,9 @@ double middleGuess(double r_infinity,  double Energy,
   } 
  return a;
 }
+
 /*
- * To replace smallGuess
+ * Guess the minimum value for searching the return points (the left hand side). 
  */
 double closeToOriginGuess(double r_o, double Energy,
 		          double wsRadius1, double wsRadius2,
@@ -172,12 +172,12 @@ double closeToOriginGuess(double r_o, double Energy,
  *Sl   PENETRATION PROBABILITY				*
 
  *********************************************************/
-// To replace Tl method template
+
 double TransmissionCoeff(double r2, double r1, double Energy,
-		          double wsRadius1, double wsRadius2,
-		           int protonNumber1, int protonNumber2,
-		            int baryonNumber1, int baryonNumber2,
-			     double reducedMass, int orbitalAngularMomentum) 
+		         double wsRadius1, double wsRadius2,
+		         int protonNumber1, int protonNumber2,
+		         int baryonNumber1, int baryonNumber2,
+			 double reducedMass, int orbitalAngularMomentum) 
 {
   int l = orbitalAngularMomentum;
   int z1 = protonNumber1;
@@ -200,10 +200,10 @@ double TransmissionCoeff(double r2, double r1, double Energy,
   Sl = dot(W, fl) / hbarc;
   return 1 / (1 + exp(Sl)); 
 }
-/***
- * To replace Tl_HW
- * TransmissionCoeffHW:	TRANSMISSION COEF. WHEN E>Vmax (HILL-WHEELER)	*
-***********/
+
+/*
+ * TransmissionCoeffHW:	TRANSMISSION COEF. WHEN E>Vmax (HILL-WHEELER)	
+ */
 
 double TransmissionCoeffHW(double b_, double rAtInfinity, double Energy,
 		           double wsRadius1, double wsRadius2,
@@ -240,15 +240,12 @@ double TransmissionCoeffHW(double b_, double rAtInfinity, double Energy,
 }
 
 
-
-
 /*********************************************************
  *   S_fact	  ASTROPHYSICAL S-FACTOR	      	 *
  *       Outputs                                         *
  *   Sfactor : Astrophysical S-factor                    *
  *   crossSection: cross section                         * 
  *********************************************************/
- // To replace S_fact
 void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
 		               double wsRadius1, double wsRadius2,
 		               int protonNumber1, int protonNumber2,
@@ -270,6 +267,7 @@ void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
   Sfactor = 0.0;
   vector<double> T_l(21), subl(21);
   cout<<"calculating fusion at E = "<<En<<"MeV\n";
+  cout<<" l   \t      r_1 \t  r_2 \t    T_l\n";
   double gamow = z1 * z2 * e2 * sqrt( mu / ( 2 * En * hbarc2));
   local = (En > 7.2)? 1:0;
   for(int l = local; l < T_l.size(); l++)
@@ -277,11 +275,13 @@ void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
     a_ = closeToOriginGuess(0.04, En, R1, R2, z1, z2, B1, B2, mu, l);
     b_ = middleGuess(r, En, R1, R2, z1, z2, B1, B2, mu, l);
 
+
     Zero<double, potentialMenusEnergy>(a_, b_, En, R1, R2, 
                                         z1, z2, B1, B2, mu, l, r2,100);
     Zero<double, potentialMenusEnergy>(b_, r, En, R1, R2, 
                                          z1, z2, B1, B2, mu, l, r1, 100);
 
+    
     double deltar=fabs(r1-r2);
     //L = l;
     

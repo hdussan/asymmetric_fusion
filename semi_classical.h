@@ -63,36 +63,6 @@ void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
 			       double reducedMass,
                                double &Sfactor, double &crossSection);
 
-/********************************************************
- *   FUNCTIONS	SELF-CONSISTENT VELOCITY CALCULATION	*
- * To be declared  Don't have to be templates    !!!!!  *
- ********************************************************/
-
-
-//// Self-consistent calculation of the velocity
-//// Sao Paulo potential 
-template<class T>
-inline T f_v2(T A1,T A2,T v2)
-{ 
-  return A1 - A2 * exp(-4 * v2);
-}
-
-template<class T>
-T speedy2(T En,T A1,T A2)
-{
- T vold2,vnew2,vsonew2,v2;
- v2=0.02;
- inicio:
-        vold2=v2;
-        vnew2=f_v2(A1,A2,vold2);
-        vsonew2=0.9*vnew2+(1-0.9)*vold2;
-	if(fabs(vsonew2-vold2)>1.0e-15)
-	  { 
-           v2=vsonew2;
-	   goto inicio;
-          }
-return v2;
-}
 
 #endif
 
