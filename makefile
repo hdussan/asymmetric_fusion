@@ -20,12 +20,13 @@ MainHeader = a_fusion.h
 PotHeader = potentials.h 
 FoldedHeader = folded_potential.h
 SemiClassicHeader = semi_classical.h
-
+MinimalHeader = minimal.h
 # Prepare for Dependencies
-MainFile = main.o
-PotFiles = potentials.o
-FoldedFile = folded_potential.o
+MainFile     = main.o
+PotFiles     = potentials.o
+FoldedFile   = folded_potential.o
 SemiClassicFile = semi_classical.o
+
 # Compilation
 a_fusion:$(OBJ)
 	$(COMPILE) $(GSLFLAGS) -o a_fusion $(OBJ)

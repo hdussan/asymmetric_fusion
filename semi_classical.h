@@ -11,59 +11,61 @@
 #include "constants.h"
 #include "potentials.h"
 #include "folded_potential.h"
-#include "minimal.h"
-#include "Derivate.h"
 #include <cmath>
 #include <vector>
 using namespace std;
 
 double const hbarc2 = hbarc * hbarc;
+
 /*
   Reduced mass
  */
 double mReduce(int B1, int B2);
 
-double menosEffectiveV(double r, double Energy, 
-                        double wsRadius1, double wsRadius2,
-			int protonNumber1, int protonNumber2,
-			int baryonNumber1, int baryonNumber2,
-		        double reducedMass, int orbitalAngularMomentum);
+double selfconsistentV2(double Energy, double coeff1, double coeff2);
 
-double potentialMenusEnergy(double r, double Energy,
-                            double wsRadius1, double wsRadius2,
-			    int protonNumber1, int protonNumber2,
-			    int baryonNumber1, int baryonNumber2,
-			    double reducedMass, int orbitalAngularMomentum);
+/*********************************************************
+ *********************************************************/
+class fusionSemiClassical
+{
+  private:
+    double wsRadius1;
+    int protonNumber1;
+    int baryonNumber1;
+    double wsRadius2;
+    int protonNumber2;
+    int baryonNumber2;
+    double reducedMass;
+  public:
+    fusionSemiClassical(double R1, int Z1, int A1, double R2, int Z2, int A2, double mu);
 
+    double menosEffectiveV(double r, double Energy, int orbitalAngularMomentum);
 
-double middleGuess(double r_infinity,  double Energy,
-		   double wsRadius1, double wsRadius2,
-		   int protonNumber1, int protonNumber2,
-		   int baryonNumber1, int baryonNumber2,
-		   double reducedMass, int orbitalAngularMomentum);
+    double potentialMenusEnergy(double r, double Energy, int orbitalAngularMomentum);
 
-double closeToOriginGuess(double r_o, double Energy,
-		          double wsRadius1, double wsRadius2,
-		          int protonNumber1, int protonNumber2,
-		          int baryonNumber1, int baryonNumber2,
-			  double reducedMass, int orbitalAngularMomentum);
+    double middleGuess(double r_infinity,  double Energy, int orbitalAngularMomentum);
 
+    double findReturnPoint(double rMenus, double rPlus, double Energy,
+                           int orbitalAngularMomentum);
 
-double TransmissionCoeff(double r2, double r1, double Energy,
-		         double wsRadius1, double wsRadius2,
-		         int protonNumber1, int protonNumber2,
-		         int baryonNumber1, int baryonNumber2,
-			 double reducedMass, int orbitalAngularMomentum);
+    double differentiateV(double const &xo, double const &h,
+                          double input4function1, int input4function2);
 
+    double closeToOriginGuess(double r_o, double Energy, int orbitalAngularMomentum);
 
-void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
-		               double wsRadius1, double wsRadius2,
-		               int protonNumber1, int protonNumber2,
-		               int baryonNumber1, int baryonNumber2,
-			       double reducedMass,
-                               double &Sfactor, double &crossSection);
+    double TransmissionCoeff(double r2, double r1, double Energy, int orbitalAngularMomentum);
 
+    double TransmissionCoeffHW(double b_, double rAtInfinity, double Energy, 
+                               int orbitalAngularMomentum); 
 
+    void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
+                                   double &Sfactor, double &crossSection);
+
+    double brentMinimise(const double ax, const double bx, const double cx,
+                         const double input4function1, const int input4function2, 
+			 const double tol, double &xmin);
+
+};
 #endif
 
 
