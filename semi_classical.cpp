@@ -442,3 +442,42 @@ double fusionSemiClassical::brentMinimise(const double ax, const double bx,
  xmin = x;
  return fx;
 }
+/*
+ * High level function that saves the astrophysical S-factor and
+ *  the associated cross section.
+ * Inputs:
+ *    [energyMin, energyMax] = interval in which the S-factor and cross 
+ *                              section is wanted
+ *    numberDataPoints = number of data wanted in this interval
+ *  This method generates S(E) and \sigma(E) and saves the data to an
+ *  indexed file.
+ */
+void fusionSemiClassical::saveAstrophysicalSfactor(const double EnergyMin, 
+                                                   const double EnergyMax, 
+                                                   int numberDataPoints)
+{
+  double const dE = (EnergyMax - EnergyMin) / numberDataPoints;
+  double r = (EnergyMin < 2.)?  128.:48.;
+  double rInfinity = 40.; 
+  double En = EnergyMin;
+ 
+  double S_E=0.0, crossSec=0.0;
+
+  ofstream file;
+  char afuera[15];
+  sprintf(afuera,"%s%d%s%d%s","S_",int(baryonNumber1),"_",int(baryonNumber2),"new.dat");
+
+  file.open(afuera,ios::out);  
+  for(int i = 0; i <= numberDataPoints ; i++)
+    {
+      getSfactorAndCrossSection(r, rInfinity, En,
+                                        S_E, crossSec);
+  
+      file<<En<<"  \t"<<S_E<<" \t"<<crossSec<<endl;
+      cout<<"energy \t"<<"s-factor \t"<<"cross section\n";
+      cout<<En<<"  \t"<<S_E<<" \t"<<crossSec<<endl;
+      En += dE;
+    } 
+  
+  file.close();
+}

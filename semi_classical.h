@@ -13,6 +13,8 @@
 #include "folded_potential.h"
 #include <cmath>
 #include <vector>
+#include <fstream>
+
 using namespace std;
 
 double const hbarc2 = hbarc * hbarc;
@@ -64,6 +66,8 @@ class fusionSemiClassical
     double brentMinimise(const double ax, const double bx, const double cx,
                          const double input4function1, const int input4function2, 
 			 const double tol, double &xmin);
+
+    void saveAstrophysicalSfactor(const double energyMin, const double energyMax, int numberDataPoints);
 
 };
 #endif
