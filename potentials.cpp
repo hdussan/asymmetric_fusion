@@ -4,7 +4,7 @@
  *  for the semiclassical scattering
  *  of two nuclei
  */
- #include "Potentials.h"
+ #include "potentials.h"
  using namespace std;
 /*
   Coulomb Potential between 2 nuclei

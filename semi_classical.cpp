@@ -277,8 +277,8 @@ double fusionSemiClassical::TransmissionCoeffHW(double b_, double rAtInfinity,
  void fusionSemiClassical::getSfactorAndCrossSection(double r, 
                                                      double rAtInfinity,
                                                      double Energy,
-                                                     double &Sfactor, 
-                                                     double &crossSection)
+                                                     vector<double> &Sfactor, 
+                                                     vector<double> &crossSection)
  {
   double En = Energy;
   double R1 = wsRadius1;
@@ -291,14 +291,14 @@ double fusionSemiClassical::TransmissionCoeffHW(double b_, double rAtInfinity,
 
   double a_, b_, r1, r2;
   int local;
-  Sfactor = 0.0;
+  //Sfactor = 0.0;
   vector<double> T_l(21), subl(21);
 
   double gamow = z1 * z2 * e2 * sqrt( mu / ( 2 * En * hbarc2));
   local = (En > 7.2)? 1:0;
 
-  cout<<"calculating fusion at E = "<<En<<"MeV\n";
-  cout<<" l   \t      r_1 \t  r_2 \t    T_l\n";
+  //cout<<"calculating fusion at E = "<<En<<"MeV\n";
+  //cout<<" l   \t      r_1 \t  r_2 \t    T_l\n";
   for(int l = local; l < T_l.size(); l++)
   {
      a_ = closeToOriginGuess(0.04, En, l);
@@ -318,14 +318,20 @@ double fusionSemiClassical::TransmissionCoeffHW(double b_, double rAtInfinity,
      
      subl[l] = 2 * l + 1;
      
-     cout.precision(8);
-     cout<<l<<" \t"<<r1<<" \t"<<r2<<" \t"<<T_l[l]<<endl;
+     //cout.precision(8);
+     //cout<<l<<" \t"<<r1<<" \t"<<r2<<" \t"<<T_l[l]<<endl;
   }
-
-  Sfactor = pi * hbarc2 * dot(subl, T_l) * exp(2 * pi * gamow) 
+ 
+ double localSfactor = pi * hbarc2 * dot(subl, T_l) * exp(2 * pi * gamow) 
                                                   / (2 * mu * 100); 
 
-  crossSection = pi * hbarc2 * dot(subl, T_l)* 10 / (2 * mu * En);
+  double localCrossSection = pi * hbarc2 * dot(subl, T_l)* 10 / (2 * mu * En);
+
+  
+  Sfactor.push_back(localSfactor ); 
+
+  crossSection.push_back(localCrossSection );
+  cout<< En<<"  \t"<<localSfactor<<" \t"<<localCrossSection<<"\n";
 }
 /**************************************************************/
 /**************************************************************/
@@ -451,33 +457,60 @@ double fusionSemiClassical::brentMinimise(const double ax, const double bx,
  *    numberDataPoints = number of data wanted in this interval
  *  This method generates S(E) and \sigma(E) and saves the data to an
  *  indexed file.
+ *        /////DEPRECATED////////////
  */
-void fusionSemiClassical::saveAstrophysicalSfactor(const double EnergyMin, 
-                                                   const double EnergyMax, 
-                                                   int numberDataPoints)
+void fusionSemiClassical::saveAstrophysicalSfactor(vector<double> &energies)
 {
-  double const dE = (EnergyMax - EnergyMin) / numberDataPoints;
-  double r = (EnergyMin < 2.)?  128.:48.;
+  int numberDataPoints = energies.size();
+  double r = (energies[0] < 2.)?  128.:48.;
   double rInfinity = 40.; 
-  double En = EnergyMin;
  
-  double S_E=0.0, crossSec=0.0;
+  double S_E = 0.0, crossSection = 0.0;
 
   ofstream file;
   char afuera[15];
+  /*
   sprintf(afuera,"%s%d%s%d%s","S_",int(baryonNumber1),"_",int(baryonNumber2),"new.dat");
 
   file.open(afuera,ios::out);  
-  for(int i = 0; i <= numberDataPoints ; i++)
-    {
-      getSfactorAndCrossSection(r, rInfinity, En,
-                                        S_E, crossSec);
+  for(int i = 0; i < numberDataPoints ; i++)
+  {
+     getSfactorAndCrossSection(r, rInfinity, energies[i],
+                                       S_E, crossSection);
   
-      file<<En<<"  \t"<<S_E<<" \t"<<crossSec<<endl;
-      cout<<"energy \t"<<"s-factor \t"<<"cross section\n";
-      cout<<En<<"  \t"<<S_E<<" \t"<<crossSec<<endl;
-      En += dE;
-    } 
-  
+     file<<energies[i]<<"  \t"<<S_E<<" \t"<<crossSection<<endl;
+
+  }   
   file.close();
+  */
+}
+
+
+void solveFusion(fusionSemiClassical &XY, double minEnergy,double maxEnergy, int numberData,
+                        vector<double> &energyValues,  vector<double> &Sfactor, vector<double> &crossSection)
+{
+  double dE = (maxEnergy - minEnergy) / numberData;
+  double En = minEnergy;
+
+  for(int i =0; i<numberData; i++)
+  {
+    energyValues.push_back(En);
+    En += dE;
+  }
+  double r; 
+  double rInfinity = 40.;
+
+  boost::thread_group tgroup;
+  for(int i =0; i<numberData; i++)
+  {
+    r = (energyValues[i] < 1.)? 200.:64.; 
+    double localSfactor,localCrossSection;
+    tgroup.create_thread(boost::bind(&fusionSemiClassical::getSfactorAndCrossSection, 
+                                     &XY, r, rInfinity,energyValues[i], Sfactor,
+                                     crossSection));
+    
+  }
+
+  tgroup.join_all();
+
 }

@@ -7,13 +7,18 @@ OBJ = main.o potentials.o folded_potential.o semi_classical.o
 
 CFLAGS= -c -O3 
 COMPILE=g++
-GSLFLAGS=-lgsl -lgslcblas
+THREADFLAG=-lpthread
 #
 BoostPath=/usr/local/include/boost
 InclBoost=-I$(BoostPath)
+# 
+#   boost threads
 #
-EIGENPATH=/usr/local/include/Eigen/
-InclEigen=-I$(EIGENPATH)
+IncludePath=/usr/local/include
+InclInclude=-I$(IncludePath)
+LibPath=/usr/local/lib
+LibLink=-L$(LibPath)
+BoostThreadFLAG=-lboost_system -lboost_thread
 
 #  List of header files for dependencies
 MainHeader = a_fusion.h
@@ -29,9 +34,9 @@ SemiClassicFile = semi_classical.o
 
 # Compilation
 a_fusion:$(OBJ)
-	$(COMPILE) $(GSLFLAGS) -o a_fusion $(OBJ)
+	$(COMPILE) $(InclInclude) $(LibLink) $(BoostThreadFLAG) -o a_fusion $(OBJ)
 $(OBJ):%.o: %.cpp
-	$(COMPILE) $(CFLAGS) $(InclEigen) $(InclBoost) $< -o $@
+	$(COMPILE) $(CFLAGS) $(InclBoost) $< -o $@
 
 # Dependencies
 $(MainFile):  $(MainHeader)

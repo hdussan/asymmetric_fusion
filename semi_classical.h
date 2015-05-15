@@ -14,9 +14,12 @@
 #include <cmath>
 #include <vector>
 #include <fstream>
+//#include <pthread.h>
+#include <boost/thread.hpp>
+#include <boost/bind.hpp>
 
 using namespace std;
-
+using namespace boost;
 double const hbarc2 = hbarc * hbarc;
 
 /*
@@ -59,17 +62,24 @@ class fusionSemiClassical
 
     double TransmissionCoeffHW(double b_, double rAtInfinity, double Energy, 
                                int orbitalAngularMomentum); 
-
+    /*
     void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
                                    double &Sfactor, double &crossSection);
+    */
+    void getSfactorAndCrossSection(double r, double rAtInfinity, double Energy,
+                                   vector<double> &Sfactor, vector<double> &crossSection);
 
     double brentMinimise(const double ax, const double bx, const double cx,
                          const double input4function1, const int input4function2, 
 			 const double tol, double &xmin);
 
-    void saveAstrophysicalSfactor(const double energyMin, const double energyMax, int numberDataPoints);
+    void saveAstrophysicalSfactor(vector<double> &energies);
 
 };
+
+void solveFusion(fusionSemiClassical &XY, double minEnergy,double maxEnergy, int numberData,
+                 vector<double> &energyValues,  vector<double> &Sfactor, vector<double> &crossSection);
+
 #endif
 
 
