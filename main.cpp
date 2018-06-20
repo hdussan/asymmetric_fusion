@@ -1,12 +1,13 @@
 /*
- *                        main.cpp
- * FUSION ^Z1 A1 + ^Z2 A2 REACTIONS FOR ASTROPHYSICAL
- * CALCULATIONS.
- * BUILDING NOV 15,07.
+ * Helber Dussan
+ * 2007
+ *                      
+ * FUSION ^Z1 A1 + ^Z2 A2 REACTIONS FOR ASTROPHYSICAL CALCULATIONS.
+ *
  *
  * Updated to run in parallel in the range of energies 
  * specified
-/********************************************************/
+ */
 
 #include "a_fusion.h"
 using namespace std;

@@ -269,10 +269,13 @@ double fusionSemiClassical::TransmissionCoeffHW(double b_, double rAtInfinity,
 
 
 /*********************************************************
- *   S_fact	  ASTROPHYSICAL S-FACTOR	      	 *
- *       Outputs                                         *
- *   Sfactor : Astrophysical S-factor                    *
- *   crossSection: cross section                         * 
+ *   S_fact	  ASTROPHYSICAL S-FACTOR	      	           
+ *       Inputs                                          
+ *   r : Guess return point [fm]                         
+ *   rAtInfinity : Guess return point at infinity  [fm]  
+ *       Outputs                                         
+ *   Sfactor : Astrophysical S-factor                    
+ *   crossSection: cross section                          
  *********************************************************/
  void fusionSemiClassical::getSfactorAndCrossSection(double r, 
                                                      double rAtInfinity,
@@ -322,7 +325,7 @@ double fusionSemiClassical::TransmissionCoeffHW(double b_, double rAtInfinity,
      //cout<<l<<" \t"<<r1<<" \t"<<r2<<" \t"<<T_l[l]<<endl;
   }
  
- double localSfactor = pi * hbarc2 * dot(subl, T_l) * exp(2 * pi * gamow) 
+  double localSfactor = pi * hbarc2 * dot(subl, T_l) * exp(2 * pi * gamow) 
                                                   / (2 * mu * 100); 
 
   double localCrossSection = pi * hbarc2 * dot(subl, T_l)* 10 / (2 * mu * En);
@@ -338,8 +341,8 @@ double fusionSemiClassical::TransmissionCoeffHW(double b_, double rAtInfinity,
 
 
 /**************************************************************
-    Brent Algorithm: to find minimum of the potentialMenusEnergy()
-  TODO: should be a better way to do this, since it is the function
+  Brent Algorithm: to find minimum of the potentialMenusEnergy()
+  TODO: should be a better way to do this, since the function
         to minimise is hardwired
  **************************************************************/
 double fusionSemiClassical::brentMinimise(const double ax, const double bx, 
@@ -356,8 +359,8 @@ double fusionSemiClassical::brentMinimise(const double ax, const double bx,
   double a, b, d = 0.0, etemp, fu, fv, fw, fx;
   double p, q, r, tol1, tol2, u, v, w, x, xm;
   /********************************************
-   *e:=distance moved on the step before last *
-   *a,b:=must be in ascending order	      *
+   * e:= distance moved on the step before last 
+   * a,b:= must be in ascending order	      
    ********************************************/
   double e = 0.0;
   a = (ax < cx? ax:cx);
@@ -370,9 +373,9 @@ double fusionSemiClassical::brentMinimise(const double ax, const double bx,
 
   for(iter = 0; iter < ITMAX; iter++)
   {
-    xm = 0.5 * (a+b);
+    xm = 0.5 * (a + b);
     tol2 = 2.0 * (tol1 = tol * fabs(x) + ZEPS);
-    if(fabs(x-xm) <= (tol2 - 0.5 * (b-a)))
+    if(fabs(x-xm) <= (tol2 - 0.5 * (b - a)))
     {
       xmin = x; 
       return fx;
@@ -393,15 +396,15 @@ double fusionSemiClassical::brentMinimise(const double ax, const double bx,
       e = d;
       if(fabs(p) >= fabs(0.5 * q * etemp) || p <= q * (a - x) || p >= q * (b-x))
       {
-	d = CGOLD * (e =(x >= xm)? (a - x):(b - x));
+	      d = CGOLD * (e = (x >= xm)? (a - x):(b - x));
       }
       else
       {
-	d = p / q;		     //parabolic step.
-	u = x + d;
-	if( (u - a) < tol2 || (b - u) < tol2)
-	{
-	  d = SIGN(tol1,xm - x);
+	      d = p / q;		     //parabolic step.
+        u = x + d;
+        if( (u - a) < tol2 || (b - u) < tol2)
+        {
+          d = SIGN(tol1,xm - x);
         }
       }
     }
@@ -489,24 +492,28 @@ void fusionSemiClassical::saveAstrophysicalSfactor(vector<double> &energies)
 void solveFusion(fusionSemiClassical &XY, double minEnergy,double maxEnergy, int numberData,
                         vector<double> &energyValues,  vector<double> &Sfactor, vector<double> &crossSection)
 {
+  cout<<" Fusion Reaction Solution Started ...\n";
   double dE = (maxEnergy - minEnergy) / numberData;
   double En = minEnergy;
 
-  for(int i =0; i<numberData; i++)
+  for(int i = 0; i < numberData; i++)
   {
     energyValues.push_back(En);
     En += dE;
   }
+  
+  double rInfinity = 40.; //fm
+  const double rGuessLowEnergy = 200; //fm
+  const double rGuessHigherEnergy = 64; //fm 
   double r; 
-  double rInfinity = 40.;
 
   boost::thread_group tgroup;
-  for(int i =0; i<numberData; i++)
+  for(int i = 0; i<numberData; i++)
   {
-    r = (energyValues[i] < 1.)? 200.:64.; 
+    r = (energyValues[i] < 1.)? rGuessLowEnergy:rGuessHigherEnergy; 
     double localSfactor,localCrossSection;
     tgroup.create_thread(boost::bind(&fusionSemiClassical::getSfactorAndCrossSection, 
-                                     &XY, r, rInfinity,energyValues[i], Sfactor,
+                                     &XY, r, rInfinity, energyValues[i], Sfactor,
                                      crossSection));
     
   }

@@ -18,7 +18,7 @@ IncludePath=/usr/local/include
 InclInclude=-I$(IncludePath)
 LibPath=/usr/local/lib
 LibLink=-L$(LibPath)
-BoostThreadFLAG=-lboost_system -lboost_thread
+BoostThreadFLAG=-lboost_system -lboost_thread-mt
 
 #  List of header files for dependencies
 MainHeader = a_fusion.h
